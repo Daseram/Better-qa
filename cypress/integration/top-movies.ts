@@ -1,3 +1,5 @@
+import { verify } from "cypress/types/sinon";
+
 describe("Top Movies selection", () => {
     it("Should display movie tiles", () => {
         cy.visit("https://top-movies-qhyuvdwmzt.now.sh/");
@@ -19,9 +21,7 @@ describe("Top Movies selection", () => {
         cy.get("header").find("input").type("Star trek{enter}");
         cy.get(".movie-card > div[title*='Star Trek: First Contact']").should('exist').and("be.visible");
         cy.get(".movie-card > div[title*='The Shawshank Redemption']").should('not.exist');
-        cy.get("header").find("input").then($input => {
-            $input.val("");
-        });
+        cy.get("header").find("input").clear();
     })
 
     it("Should pick a movie and check the info is correct", () => {
@@ -31,6 +31,13 @@ describe("Top Movies selection", () => {
         cy.get("div").contains("Popularity").next().children().should("have.value", "26.89");
         cy.get("div").contains("Vote average").next().children().should("have.value", "6.6");
         cy.get("div").contains("Vote count").next().children().should("have.value", "5299");
+        cy.get("div > button").contains("Close").click();        
+    })
 
+    it("Should return to main page when the search is clear", () => {
+        cy.get("header").find("input").clear();
+        cy.get("header").find("input").type("{enter}");
+        cy.wait(1000);
+        cy.get(".movies").children().its("length").should("be.greaterThan", 1);
     })
 })

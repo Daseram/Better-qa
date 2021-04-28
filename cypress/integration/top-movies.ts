@@ -1,5 +1,3 @@
-import { verify } from "cypress/types/sinon";
-
 describe("Top Movies selection", () => {
     it("Should display movie tiles", () => {
         cy.visit("https://top-movies-qhyuvdwmzt.now.sh/");
